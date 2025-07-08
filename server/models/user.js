@@ -1,5 +1,8 @@
 const mongoose = require('mongoose'); // Erase if already required
 const bcrypt = require('bcrypt');
+const crypto = require('crypto');
+const { type } = require('os');
+
 
 // Declare the Schema of the Mongo model
 var userSchema = new mongoose.Schema({
@@ -16,10 +19,13 @@ var userSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
+    avatar: {
+        type: String,
+    },
     mobile: {
         type: String,
-        required: true,
         unique: true,
+        required: true,
     },
     password: {
         type: String,
@@ -27,21 +33,22 @@ var userSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        default: 'user',
+        enum: [0, 1],
+        default: 1,
     },
-    cart: {
-        type: Array,
-        default: [],
-    },
-    address: [
+    cart: [
         {
-            type: mongoose.Types.ObjectId, // dòng này có nghĩa là lưu kiểu dữ liệu là OjectId của mongoose
-            ref: 'Address'
-        }
+            product: { type: mongoose.Types.ObjectId, ref: 'Product' },
+            quantity: Number,
+            color: String,
+        },
     ],
+    address: {
+        type: String,
+    },
     whistlist: [
         {
-            type: mongoose.Types.ObjectId,
+            type: mongoose.Types.ObjectId, // dòng này có nghĩa là lưu kiểu dữ liệu là OjectId của mongoose
             ref: 'Product'
         }
     ],
@@ -61,6 +68,9 @@ var userSchema = new mongoose.Schema({
     passwordResetExpires: {
         type: String,
     },
+    registerToken: {
+        type: String,
+    }
 
 
 }, {
@@ -75,8 +85,14 @@ userSchema.pre('save', async function (next) {
     this.password = await bcrypt.hash(this.password, salt)
 })
 userSchema.methods = {
-    isCorretPassword: async function (password) {
+    isCorrectPassword: async function (password) {
         return await bcrypt.compare(password, this.password)
+    },
+    createPasswordChangeToken: function () {
+        const resetToken = crypto.randomBytes(32).toString('hex')
+        this.passwordResetToken = crypto.createHash('sha256').update(resetToken).digest('hex')
+        this.passwordResetExpires = Date.now() + 15 * 60 * 1000
+        return resetToken
     }
 }
 //Export the model
