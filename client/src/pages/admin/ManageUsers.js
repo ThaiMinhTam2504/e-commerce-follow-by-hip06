@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { apiGetUsers, apiUpdateUser, apiDeleteUser } from 'apis/user'
-import { roles } from 'utils/contants'
+import { roles, blockStatus } from 'utils/contants'
 import moment from 'moment'
 import { InputField, Pagination, InputForm, Select, Button } from 'components'
 import useDebounce from 'hooks/useDebounce'
@@ -8,17 +8,19 @@ import { useSearchParams } from 'react-router-dom'
 import { set, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import Swal from 'sweetalert2'
+import clsx from 'clsx'
+import { use } from 'react'
 
 const ManageUsers = () => {
 
     //định nghĩa payload mặc định cho useForm
-    const { handleSubmit, register, formState: { errors } } = useForm({
+    const { handleSubmit, register, formState: { errors }, reset } = useForm({
         email: '',
         firstname: '',
         lastname: '',
         role: '',
         phone: '',
-        status: ''
+        isBlocked: ''
 
     })
 
@@ -87,8 +89,20 @@ const ManageUsers = () => {
         //     toast.error(response.mes)
         // }
     }
+    useEffect(() => {
+        if (editElem) {
+            reset({
+                email: editElem.email,
+                firstname: editElem.firstname,
+                lastname: editElem.lastname,
+                role: editElem.role,
+                phone: editElem.phone,
+                isBlocked: editElem.isBlocked
+            })
+        }
+    }, [editElem, reset])
     return (
-        <div className='w-full pl-8 '>
+        <div className={clsx('w-full', editElem && 'pl-14')}>
             <h1 className='h-[75px] flex  justify-between items-center text-3xl font-bold px-4 border-b'>
                 <span>Manage Users</span>
             </h1>
@@ -138,6 +152,8 @@ const ManageUsers = () => {
                                                     }
                                                 }}
                                                 fullWidth
+                                                style={'w-[250px]'}
+
                                             />
                                             : <span>{el.email}</span>}
                                     </td>
@@ -167,7 +183,17 @@ const ManageUsers = () => {
                                     </td>
                                     <td className='py-2 px-4'>
                                         {editElem?._id === el._id
-                                            ? <Select />
+                                            ? <Select
+                                                register={register}
+                                                fullWidth
+                                                errors={errors}
+                                                defaultValue={+el.role}
+                                                id={'role'}
+                                                validate={{ required: 'Required field' }}
+                                                options={roles}
+                                                style={'w-[110px]'}
+
+                                            />
                                             : <span>{roles.find(role => +role.code === +el.role)?.value}</span>}
                                     </td>
 
@@ -186,12 +212,23 @@ const ManageUsers = () => {
                                                     }
                                                 }}
                                                 fullWidth
+                                                style={'w-[110px]'}
                                             />
                                             : <span>{el.mobile}</span>}
                                     </td>
                                     <td className='py-2 px-4'>
                                         {editElem?._id === el._id
-                                            ? <Select />
+                                            ? <Select
+                                                register={register}
+                                                fullWidth
+                                                errors={errors}
+                                                defaultValue={el.isBlocked}
+                                                id={'isBlocked'}
+                                                validate={{ required: 'Required field' }}
+                                                options={blockStatus}
+                                                style={'w-[110px]'}
+
+                                            />
                                             : <span>{el.isBlocked ? 'Blocked' : 'Active'}</span>}
                                     </td>
 
