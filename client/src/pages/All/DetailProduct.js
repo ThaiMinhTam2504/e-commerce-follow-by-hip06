@@ -6,6 +6,7 @@ import Slider from 'react-slick'
 import ReactImageMagnify from 'react-image-magnify'
 import { formatPrice, formatMoney, renderStarFromNumber } from '../../utils/helper'
 import { productExtraInfomation } from '../../utils/contants'
+import DOMPurify from 'dompurify'
 
 const settings = {
     dots: false,
@@ -78,7 +79,7 @@ const DetailProduct = () => {
             </div>
             <div className='w-main m-auto mt-4 flex'>
                 <div className=' flex flex-col gap-4 w-2/5'>
-                    <div className='h-[458px] w-[458px] border'>
+                    <div className='h-[458px] w-[458px] border flex items-center'>
                         <ReactImageMagnify {...{
                             smallImage: {
                                 alt: 'Wristwatch by Ted Baker London',
@@ -101,6 +102,7 @@ const DetailProduct = () => {
                                 height: "50px",
                                 borderRadius: "0px"
                             }
+
                         }} />
                     </div>
                     {/* <img src={product?.images} alt="product" className='h-[458px] w-[458px] object-cover border' /> */}
@@ -126,9 +128,10 @@ const DetailProduct = () => {
                         <span className='text-sm text-main underline font-medium italic'>{`SOLD: ${product?.sold}`}</span>
                     </div>
                     <ul className='list-square text-sm text-gray-500 pl-4'>
-                        {product?.description?.map(el => (
+                        {product?.description?.length > 1 && product?.description?.map(el => (
                             <li className='leading-6' key={el}>{el}</li>
                         ))}
+                        {product?.description?.length === 1 && <div className='text-sm line-clamp-[10] mb-8' dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product?.description[0]) }} ></div>}
                     </ul>
                     <div className='flex flex-col gap-8'>
                         <div className='flex items-center gap-4'>
