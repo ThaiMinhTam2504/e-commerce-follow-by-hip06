@@ -7,9 +7,9 @@ const usePagination = (totalProductCount, currentPage, siblingCount = 1) => {
     //useMeno lưu kết quả tính toán của hàm và chỉ tính toán lại khi các giá trị phụ thuộc thay đổi, giúp tối ưu hóa hiệu suất của ứng dụng
     //khác với useCallback là hàm sẽ được gọi lại mỗi khi component render lại
     const paginationArray = useMemo(() => {
-        const pageSize = process.env.REACT_APP_LIMIT || 10
-        const paginationCount = Math.ceil(totalProductCount / pageSize)
-        const totalPaginationItem = siblingCount + 5
+        const pageSize = +process.env.REACT_APP_LIMIT || 10
+        const paginationCount = Math.ceil(+totalProductCount / pageSize)
+        const totalPaginationItem = +siblingCount + 5
         if (paginationCount <= totalPaginationItem) return generateRange(1, paginationCount)
 
         const isShowLeft = currentPage - siblingCount > 2
