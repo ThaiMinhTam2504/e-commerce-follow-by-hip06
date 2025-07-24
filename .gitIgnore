@@ -9,6 +9,7 @@
 /client/coverage
 
 # misc
+.env
 /server/.env
 /client/.env
 /client/.DS_Store
