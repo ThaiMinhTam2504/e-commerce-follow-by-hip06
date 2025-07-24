@@ -6,7 +6,7 @@ const Modal = ({ children }) => {
     const dispatch = useDispatch()
     return (
         <div onClick={() => dispatch(showModel({ isShowModal: false, modalChildren: null }))}
-            className='absolute inset-0 z-50 bg-gray-900 bg-opacity-50 flex items-center justify-center'>
+            className='fixed inset-0 z-[9999] bg-gray-900 bg-opacity-50 flex items-center justify-center'>
             {children}
         </div>
     )

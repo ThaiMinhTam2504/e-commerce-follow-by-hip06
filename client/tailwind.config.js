@@ -43,6 +43,14 @@ module.exports = {
             transform: 'translateY(0);'
           }
         },
+        'gradient-move': {
+          '0%': { 'background-position': '0% 0%' },
+          '25%': { 'background-position': '0% 50%' },
+          '50%': { 'background-position': '0% 100%' },
+          '75%': { 'background-position': '0% 50%' },
+          '100%': { 'background-position': '0% 0%' }
+        }
+        ,
         'slide-right': {
           '0%': {
             'webkit-transform': 'translateX(-1000px);',
@@ -80,6 +88,7 @@ module.exports = {
         'slide-top-sm': 'slide-top 0.2s linear both',
         'slide-right': 'slide-right 0.5s cubic-bezier(0.250,0.460,0.450,0.940) both',
         'scale-up-center': 'scale-up-center 0.15s cubic-bezier(0.390,0.575,0.565,1.000) both',
+        'animated-gradient': 'gradient-move 3s linear infinite alternate'
       }
     },
   },

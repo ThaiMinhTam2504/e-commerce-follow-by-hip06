@@ -108,3 +108,29 @@ button.slick-prev::before {
 code {
     white-space: initial;
 }
+
+.preview-images {
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 12px;
+    background: #fff;
+}
+
+.image-preview-item {
+    border: 1.5px solid #a3a3a3;
+    border-radius: 6px;
+    padding: 4px;
+    background-color: #f9fafb;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.preview-img {
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 4px;
+}

@@ -14,7 +14,10 @@ router.put('/ratings', [verifyToken], ctrls.ratings)
 
 
 router.put('/uploadimage/:pid', [verifyToken, isAdmin], uploader.array('images', 10), ctrls.uploadImagesProduct)
-router.put('/:pid', [verifyToken, isAdmin], ctrls.updateProduct)
+router.put('/:pid', [verifyToken, isAdmin], uploader.fields([
+    { name: 'images', maxCount: 10 },
+    { name: 'thumb', maxCount: 1 }
+]), ctrls.updateProduct)
 router.delete('/:pid', [verifyToken, isAdmin], ctrls.deleteProduct)
 router.get('/', ctrls.getProducts)
 

@@ -17,6 +17,9 @@ const AdminSidebar = () => {
     }
     return (
         <div className=' bg-white h-full py-4'>
+            <div className=" absolute top-0 right-0 h-full w-[6px] rounded-tr-2xl rounded-br-2xl bg-gradient-to-b from-pink-500 via-blue-500 to-green-400 animate-animated-gradient"
+                style={{ backgroundSize: '100% 200%' }}
+            ></div>
             <Link to={'/'} className='flex flex-col justify-center items-center p-4 gap-2'>
                 <img src={logo} alt='logo' className='w-[200px] object-contain' />
                 <small>Admin Workspace</small>
