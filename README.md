@@ -22,11 +22,12 @@ This is a full-stack e-commerce web application built with the MERN stack (Mongo
 
 ## 📦 Project Structure
 
-
+```
 root/
 ├── client/          # React frontend
 ├── server/          # Express backend
 └── README.md
+```
 
 
 🧪 How to Run This Project Locally
