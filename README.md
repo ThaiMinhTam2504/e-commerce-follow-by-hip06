@@ -34,8 +34,16 @@ root/
 You need to run both the frontend and the backend in separate terminals.
 
 1. Clone the repository
+```
 git clone https://github.com/ThaiMinhTam2504/e-commerce-follow-by-hip06.git
 cd e-commerce-follow-by-hip06
+```
+⚠️ Important:
+By default, GitHub may show the master branch, but all the complete code is in the main branch.
+Make sure to switch to the main branch after cloning:
+```
+git checkout main
+```
 
 2. Install Dependencies
 For client:
