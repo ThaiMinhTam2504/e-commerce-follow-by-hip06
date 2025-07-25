@@ -47,13 +47,15 @@ git checkout main
 
 2. Install Dependencies
 For client:
+```
 cd client
 npm install
-
+```
 For server:
+```
 cd ../server
 npm install
-
+```
 3. Set up Environment Variables
 
 Create two .env files manually (they are not included in the repository).
