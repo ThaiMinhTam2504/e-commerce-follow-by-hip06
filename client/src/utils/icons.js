@@ -1,4 +1,4 @@
-import { RiPhoneFill, RiTruckFill, RiBillLine } from 'react-icons/ri';
+import { RiPhoneFill, RiTruckFill, RiBillLine, RiDeleteBin6Line } from 'react-icons/ri';
 import {
     MdEmail,
     MdGroups
@@ -18,6 +18,7 @@ import {
 } from 'react-icons/ai'
 import { IoIosArrowForward } from 'react-icons/io'
 import { TbBrandProducthunt } from 'react-icons/tb'
+import { BiEdit, BiCustomize } from 'react-icons/bi';
 
 const icons = {
     RiPhoneFill,
@@ -42,6 +43,9 @@ const icons = {
     MdGroups,
     TbBrandProducthunt,
     RiBillLine,
+    RiDeleteBin6Line,
+    BiEdit,
+    BiCustomize,
 }
 
 export default icons

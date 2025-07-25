@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { InputForm, Pagination } from 'components'
+import { InputForm, Pagination, CustomizeVariants } from 'components'
 import { set, useForm } from 'react-hook-form'
 import { apiGetProducts, apiDeleteProduct } from 'apis/product'
 import moment from 'moment'
@@ -7,9 +7,11 @@ import { useSearchParams, createSearchParams, useNavigate, useLocation } from 'r
 import useDebounce from 'hooks/useDebounce'
 import UpdateProduct from './UpdateProduct'
 import Swal from 'sweetalert2'
+import icons from 'utils/icons'
 
 
 const ManageProducts = () => {
+    const { RiDeleteBin6Line, BiCustomize, BiEdit } = icons
     const navigate = useNavigate()
     const location = useLocation()
     const [params] = useSearchParams()
@@ -17,6 +19,7 @@ const ManageProducts = () => {
     const [counts, setCounts] = useState(0)
     const [editProduct, setEditProduct] = useState(null)
     const [update, setUpdate] = useState(false)
+    const [customzieVariants, setCustomizeVariants] = useState(null)
 
     const render = useCallback(() => {
         setUpdate(!update)
@@ -82,6 +85,13 @@ const ManageProducts = () => {
                         editProduct={editProduct}
                         render={render} />
                 </div>}
+            {customzieVariants &&
+                <div className='absolute inset-0 min-h-screen z-50 bg-white'>
+                    <CustomizeVariants
+                        customzieVariants={customzieVariants}
+                        setCustomizeVariants={setCustomizeVariants}
+                        render={render} />
+                </div>}
             <div className='h-[69px] w-full'></div>
             <div className='p-4 border-b w-full flex justify-between items-center fixed top-0 bg-gray-100'>
                 <h1 className='text-3xl font-bold tracking-tight '>Manage Products</h1>
@@ -110,6 +120,7 @@ const ManageProducts = () => {
                         <th className='text-center py-2'>Sold</th>
                         <th className='text-center py-2'>Color</th>
                         <th className='text-center py-2'>Total Ratings</th>
+                        <th className='text-center py-2'>Variants</th>
                         <th className='text-center py-2'>Updated At</th>
                         <th className='text-center py-2'>Action</th>
                     </tr>
@@ -129,10 +140,21 @@ const ManageProducts = () => {
                             <td className='text-center py-2'>{el.sold}</td>
                             <td className='text-center py-2'>{el.color}</td>
                             <td className='text-center py-2'>{el.totalRatings}</td>
+                            <td className='text-center py-2'>{el.variants?.length || 0}</td>
                             <td className='text-center py-2'>{moment(el.createdAt).format('DD/MM/YYYY')}</td>
                             <td className='text-center py-2'>
-                                <span onClick={() => setEditProduct(el)} className='text-blue-500 hover:underline cursor-pointer px-2'>Edit</span>
-                                <span onClick={() => handleDeleteProduct(el._id)} className='text-red-500 hover:underline cursor-pointer px-2'>Remove</span>
+                                <span
+                                    onClick={() => setEditProduct(el)}
+                                    className='text-blue-500  cursor-pointer px-1 inline-block hover:text-orange-500'>
+                                    <BiEdit size={20} /></span>
+                                <span
+                                    onClick={() => handleDeleteProduct(el._id)}
+                                    className='text-red-500  cursor-pointer px-1 inline-block hover:text-orange-800'>
+                                    <RiDeleteBin6Line size={20} /></span>
+                                <span
+                                    onClick={() => setCustomizeVariants(el)}
+                                    className='text-green-400  cursor-pointer px-1 inline-block hover:text-orange-500'>
+                                    <BiCustomize size={20} /></span>
                             </td>
                         </tr>
                     ))}

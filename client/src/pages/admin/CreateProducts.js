@@ -194,17 +194,11 @@ const CreateProducts = () => {
                             <div className='my-4 flex w-full gap-3 flex-wrap'>
                                 {preview.images.map((el, index) => (
                                     <div
-                                        onMouseEnter={() => SetHoverElm(el.name)}
-                                        onMouseLeave={() => SetHoverElm(null)}
-                                        key={index} className='w-fit relative'>
+                                        key={index}
+                                        className='w-fit relative'
+                                    >
                                         <img src={el.path} alt='product images'
                                             className='w-[200px] object-contain' />
-                                        {/*{hoverElm === el.name && <div
-                                            onClick={() => handleRemoveImage(el.name)}
-                                            className='absolute animate-scale-up-center inset-0 bg-black bg-opacity-50 flex items-center justify-center cursor-pointer'>
-                                            <IoTrashBinSharp size={24} color='white' />
-                                        </div>
-                                        }*/}
                                     </div>
                                 ))}
                             </div>}

@@ -139,7 +139,7 @@ const UpdateProduct = ({ editProduct, render, setEditProduct }) => {
             <div className='h-[69px] w-full'></div>
             <div className='p-4 border-b  flex justify-between items-center fixed right-0 left-[327px] top-0 bg-gray-100'>
                 <h1 className='text-3xl font-bold tracking-tight '>Update Products</h1>
-                <span onClick={() => setEditProduct(null)} className='text-main hover:underline cursor-pointer'>Cancel</span>
+                <span onClick={() => setEditProduct(null)} className='text-main hover:underline cursor-pointer'>Close</span>
             </div>
             <form onSubmit={handleSubmit(handleUpdateProduct)}>
                 <InputForm
