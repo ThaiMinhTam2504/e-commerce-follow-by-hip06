@@ -1,6 +1,7 @@
 const router = require('express').Router()
 const ctrls = require('../controllers/user')
 const { verifyToken, isAdmin } = require('../middleware/verifyToken')
+const uploader = require('../config/cloudinary_config')
 
 
 router.put('/cart', [verifyToken], ctrls.updateCart)
@@ -16,7 +17,7 @@ router.post('/forgotpassword', ctrls.forgotPassword)
 router.put('/resetpassword', ctrls.resetPassword)
 router.get('/', [verifyToken, isAdmin], ctrls.getUsers) // bỏ vào [] tức là phải qua cả 2 middleware verifyToken và isAdmin mới được phép vào hàm ctrls.getUsers
 router.delete('/:uid', [verifyToken, isAdmin], ctrls.deleteUser)
-router.put('/current', [verifyToken], ctrls.updateUser)
+router.put('/current', [verifyToken], uploader.single('avatar'), ctrls.updateUser)
 router.put('/:uid', [verifyToken, isAdmin], ctrls.updateUserByAdmin)
 router.delete('/delete-temporary-account', ctrls.deleteTemporaryAccount)
 

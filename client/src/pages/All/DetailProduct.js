@@ -8,6 +8,7 @@ import { formatPrice, formatMoney, renderStarFromNumber } from '../../utils/help
 import { productExtraInfomation } from '../../utils/contants'
 import DOMPurify from 'dompurify'
 import clsx from 'clsx'
+import { set } from 'react-hook-form'
 
 const settings = {
     dots: false,
@@ -98,6 +99,9 @@ const DetailProduct = () => {
         e.stopPropagation()
         setCurrentImage(el)
     }
+    // const handleClickImageWithoutEvent = (el) => {
+    //     setCurrentImage(el) // Cập nhật ảnh đang xem
+    // }
     return (
         <div className='w-full '>
             <div className='h-[81px] bg-gray-100 flex justify-center items-center'>
@@ -108,36 +112,65 @@ const DetailProduct = () => {
             </div>
             <div className='w-main m-auto mt-4 flex'>
                 <div className=' flex flex-col gap-4 w-2/5'>
-                    <div className='h-[458px] w-[458px] border flex items-center'>
+                    <div className='h-[458px] w-[458px] border flex items-center justify-center bg-white rounded-lg shadow-lg'>
                         <ReactImageMagnify {...{
                             smallImage: {
-                                alt: 'Wristwatch by Ted Baker London',
-                                isFluidWidth: true,
+                                alt: currentProduct.title || 'Product Image',
                                 // src: product?.thumb,
-                                src: currentProduct.thumb || currentImage,
+                                src: currentImage || currentProduct.thumb,
+                                isFluidWidth: false,
+                                width: 420,
+                                height: 420,
+                                style: {
+                                    objectFit: 'contain',
+                                    borderRadius: '10px',
+                                    background: '#fff',
+                                    // borderRadius: '1rem',
+                                    // border: '3px solid #60a5fa',
+                                    // boxShadow: '0 4px 24px 0 rgba(0, 0, 0, 0.1)',
+                                    // backgroundColor: 'red'
+                                }
                             },
                             largeImage: {
                                 // src: product?.thumb,
-                                src: currentProduct.images || currentImage,
+                                // src: currentProduct.images || currentImage,
+                                // width: 2000,
+                                // height: 1200
+                                src: currentImage || currentProduct.thumb,
                                 width: 2000,
                                 height: 1200
                             },
                             enlargedImageContainerDimensions: {
-                                width: "260%", // Hoặc 100%
+                                width: "360%", // Hoặc 100%
                                 height: "100%"
+                                // width: '320px',
+                                // height: '320px'
+                            },
+                            enlargedImageStyle: {
+                                objectFit: 'contain',
+                                borderRadius: '8px',
+                                background: '#fff'
                             },
                             lensStyle: {
-                                width: "50px",
-                                height: "50px",
-                                borderRadius: "0px"
-                            }
+                                // width: "50px",
+                                // height: "50px",
+                                // borderRadius: "0px"
+
+                                background: 'rgba(0,0,0,0.1)',
+                                border: '2px solid #3182ce',
+                                width: '140px',
+                                height: '140px',
+                                borderRadius: '8px'
+                            },
+                            isHintEnabled: true,
+                            shouldUsePositiveSpaceLens: true,
 
                         }} />
                     </div>
                     {/* <img src={product?.images} alt="product" className='h-[458px] w-[458px] object-cover border' /> */}
                     <div className='w-[458px]'>
                         <Slider className='image-silder flex gap-2 justify-between'  {...settings}>
-                            {currentProduct.images.length == 0 && product?.images.map(el => (
+                            {/* {currentProduct.images.length == 0 && product?.images.map(el => (
                                 <div key={el} className='flex-1'>
                                     <img onClick={e => handleClickImage(e, el)} src={el} alt='sub-product' className='h-[143px] w-[143px] border object-cover cursor-pointer' />
                                 </div>
@@ -145,6 +178,24 @@ const DetailProduct = () => {
                             {currentProduct.images.length > 0 && currentProduct?.images?.map(el => (
                                 <div key={el} className='flex-1'>
                                     <img onClick={e => handleClickImage(e, el)} src={el} alt='sub-product' className='h-[143px] w-[143px] border object-cover cursor-pointer' />
+                                </div>
+                            ))} */}
+
+                            {(currentProduct.images && currentProduct.images.length > 0
+                                ? currentProduct.images
+                                : product?.images || []
+                            ).map(el => (
+                                <div key={el} className='flex-1'>
+                                    <img
+                                        onClick={e => handleClickImage(e, el)}
+                                        // onClick={() => handleClickImageWithoutEvent(el)}
+                                        src={el}
+                                        alt='sub-product'
+                                        className={clsx(
+                                            'h-[143px] w-[143px] border object-cover cursor-pointer rounded-lg shadow-md transition-all duration-200 hover:border-blue-400 hover:scale-105',
+                                            currentImage === el && 'border-2 border-blue-500 ring-2 ring-blue-300 sclae-105'
+                                        )}
+                                    />
                                 </div>
                             ))}
                         </Slider>
@@ -171,7 +222,10 @@ const DetailProduct = () => {
                         <span className='font-bold'>Color</span>
                         <div className='flex flex-wrap gap-4 items-center w-full'>
                             <div
-                                onClick={() => setVariant(null)}
+                                onClick={() => {
+                                    setVariant(null)
+                                    setCurrentImage(product?.thumb)
+                                }}
                                 className={clsx('flex items-center gap-2 p-2 border cursor-pointer', !variant && 'border-red-500')}>
                                 <img src={product?.thumb} alt='thumb' className='w-8 h-8 rounded-md object-cover' />
                                 <span className='flex flex-col'>
@@ -181,7 +235,10 @@ const DetailProduct = () => {
                             </div>
                             {product?.variants?.map(el => (
                                 <div
-                                    onClick={() => { setVariant(el.sku) }}
+                                    onClick={() => {
+                                        setVariant(el.sku)
+                                        setCurrentImage(el.thumb)
+                                    }}
                                     className={clsx('flex items-center gap-2 p-2 border cursor-pointer', variant === el.sku && 'border-red-500')}>
                                     <img src={el.thumb} alt='thumb' className='w-8 h-8 rounded-md object-cover' />
                                     <span className='flex flex-col'>

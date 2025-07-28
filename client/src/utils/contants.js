@@ -1,5 +1,7 @@
 import path from "./path"
 import icons from "./icons"
+import { FaCartPlus, FaHeart, FaHome, FaInfoCircle } from "react-icons/fa"
+// import { type } from "@testing-library/user-event/dist/types/utility"
 
 
 export const navigation = [
@@ -231,6 +233,45 @@ export const adminSidebar = [
         text: 'Manage Orders',
         path: `/${path.ADMIN}/${path.MANAGE_ORDER}`,
         icon: <RiBillLine size={20} />
+    }
+
+]
+
+export const memberSidebar = [
+    {
+        id: 1,
+        type: 'SINGLE',
+        text: 'Personal Information',
+        path: `/${path.MEMBER}/${path.PERSONAL}`,
+        icon: <FaInfoCircle size={20} />
+    },
+    {
+        id: 2,
+        type: 'SINGLE',
+        text: 'My Cart',
+        path: `/${path.MEMBER}/${path.MY_CART}`,
+        icon: <FaCartPlus size={20} />
+    },
+    {
+        id: 3,
+        type: 'SINGLE',
+        text: 'Buy History',
+        path: `/${path.MEMBER}/${path.HISTORY}`,
+        icon: <RiBillLine size={20} color="black" />
+    },
+    {
+        id: 4,
+        type: 'SINGLE',
+        text: 'Wishlist',
+        path: `/${path.MEMBER}/${path.WISHLIST}`,
+        icon: <FaHeart size={20} />
+    },
+    {
+        id: 5,
+        type: 'SINGLE',
+        text: 'Back to Home',
+        path: `/`,
+        icon: <FaHome size={20} />
     }
 
 ]
