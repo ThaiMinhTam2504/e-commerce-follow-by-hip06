@@ -58,7 +58,7 @@ function App() {
 
         <Route path={path.MEMBER} element={<MemberLayout />}>
           <Route path={path.PERSONAL} element={<Personal />} />
-          <Route path={path.MY_CART} element={<MyCart />} />
+          <Route path={path.MY_CART} element={<MyCart props={'test_HOC'} />} />
           <Route path={path.HISTORY} element={<History />} />
           <Route path={path.WISHLIST} element={<WishList />} />
         </Route>
