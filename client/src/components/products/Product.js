@@ -6,13 +6,16 @@ import { renderStarFromNumber } from 'utils/helper'
 import { SelectOption } from '..'
 import icons from 'utils/icons'
 import withBaseComponent from 'hocs/withBaseComponent'
+import { showModel } from 'store/app/appSlice'
+import { DetailProduct } from 'pages/All'
 
 const { AiFillEye, AiOutlineMenu, BsFillSuitHeartFill } = icons
 
-const Product = ({ productData, isNew, normal, navigate }) => {
+const Product = ({ productData, isNew, normal, navigate, dispatch }) => {
     const [isShowOption, setIsShowOption] = useState(false)
     const handleClickOptions = (e, flag) => {
         e.stopPropagation()
+        e.preventDefault()
         if (flag === 'MENU') {
             navigate(`/${productData.category?.toLowerCase()}/${productData?._id}/${productData?.title}`)
         }
@@ -21,7 +24,10 @@ const Product = ({ productData, isNew, normal, navigate }) => {
             console.log('Add to wishlist', productData._id)
         }
         if (flag === 'QUICK_VIEW') {
-
+            dispatch(showModel({
+                isShowModal: true,
+                modalChildren: <DetailProduct data={{ pid: productData?._id, category: productData?.category }} isQuickView={true} />
+            }))
         }
     }
     return (

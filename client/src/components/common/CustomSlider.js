@@ -1,6 +1,7 @@
 import React, { memo } from 'react'
 import Slider from 'react-slick'
 import { Product } from '..'
+import withBaseComponent from 'hocs/withBaseComponent';
 
 const settings = {
     dots: false,
@@ -10,7 +11,7 @@ const settings = {
     slidesToScroll: 1
 };
 
-const CustomSlider = ({ products, activeTab, normal }) => {
+const CustomSlider = ({ products, activeTab, normal, navigate, dispatch }) => {
     return (
         <>
             {products && <Slider className='custom-slider'  {...settings}>
@@ -21,6 +22,8 @@ const CustomSlider = ({ products, activeTab, normal }) => {
                         productData={el}
                         isNew={activeTab === 1 ? false : true}
                         normal={normal}
+                        navigate={navigate}
+                        dispatch={dispatch}
                     />
                 ))}
             </Slider>}
@@ -28,4 +31,4 @@ const CustomSlider = ({ products, activeTab, normal }) => {
     )
 }
 
-export default memo(CustomSlider)
+export default withBaseComponent(memo(CustomSlider))
