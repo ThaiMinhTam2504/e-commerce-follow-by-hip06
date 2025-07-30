@@ -9,15 +9,15 @@ import withBaseComponent from 'hocs/withBaseComponent'
 import { showModel } from 'store/app/appSlice'
 import { DetailProduct } from 'pages/All'
 
-const { AiFillEye, AiOutlineMenu, BsFillSuitHeartFill } = icons
+const { AiFillEye, BsFillSuitHeartFill, FaCartPlus } = icons
 
 const Product = ({ productData, isNew, normal, navigate, dispatch }) => {
     const [isShowOption, setIsShowOption] = useState(false)
     const handleClickOptions = (e, flag) => {
         e.stopPropagation()
         e.preventDefault()
-        if (flag === 'MENU') {
-            navigate(`/${productData.category?.toLowerCase()}/${productData?._id}/${productData?.title}`)
+        if (flag === 'CART') {
+
         }
         if (flag === 'WISHLIST') {
             // Handle wishlist logic here
@@ -48,9 +48,9 @@ const Product = ({ productData, isNew, normal, navigate, dispatch }) => {
                     {isShowOption && <div
                         className='absolute bottom-[-10px] left-0 right-0 flex justify-center gap-2 animate-slide-top'
                     >
-                        <span onClick={(e) => handleClickOptions(e, 'QUICK_VIEW')}> <SelectOption icon={<AiFillEye />} /></span>
-                        <span onClick={(e) => handleClickOptions(e, 'MENU')}><SelectOption icon={<AiOutlineMenu />} /></span>
-                        <span onClick={(e) => handleClickOptions(e, 'WISHLIST')}><SelectOption icon={<BsFillSuitHeartFill />} /></span>
+                        <span title='Quick View' onClick={(e) => handleClickOptions(e, 'QUICK_VIEW')}> <SelectOption icon={<AiFillEye />} /></span>
+                        <span title='Add to Cart' onClick={(e) => handleClickOptions(e, 'CART')}><SelectOption icon={<FaCartPlus />} /></span>
+                        <span title='Add to Wishlist' onClick={(e) => handleClickOptions(e, 'WISHLIST')}><SelectOption icon={<BsFillSuitHeartFill />} /></span>
                     </div>}
                     <img
                         src={productData?.thumb || 'https://apollobattery.com.au/wp-content/uploads/2022/08/default-product-image.png'}

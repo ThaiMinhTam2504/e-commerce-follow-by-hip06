@@ -20,6 +20,7 @@ router.delete('/:uid', [verifyToken, isAdmin], ctrls.deleteUser)
 router.put('/current', [verifyToken], uploader.single('avatar'), ctrls.updateUser)
 router.put('/:uid', [verifyToken, isAdmin], ctrls.updateUserByAdmin)
 router.delete('/delete-temporary-account', ctrls.deleteTemporaryAccount)
+router.delete('/remove-cart/:pid', [verifyToken], ctrls.removeProductFromCart)
 
 
 

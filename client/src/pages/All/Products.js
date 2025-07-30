@@ -20,15 +20,16 @@ const Products = () => {
     const [activeClick, setActiveClick] = useState(null)
     const [params] = useSearchParams()
     const [sort, setSort] = useState('')
+    const { category } = useParams()
+    console.log("category:", category)
 
     const fetchProductsByCategory = async (queries) => {
-        const response = await apiGetProducts(queries)
+        const response = await apiGetProducts({ ...queries, category })
         if (response.success) {
             setProducts(response)
         }
     }
 
-    const { category } = useParams()
     useEffect(() => {
         //cách 1 thủ công
         // let param = []
