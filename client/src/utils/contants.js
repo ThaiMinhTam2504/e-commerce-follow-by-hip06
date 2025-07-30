@@ -12,7 +12,7 @@ export const navigation = [
     },
     {
         id: 2,
-        value: 'PRODUCTS',
+        value: 'ALL PRODUCTS',
         path: `/${path.PRODUCTS}`
     },
     {

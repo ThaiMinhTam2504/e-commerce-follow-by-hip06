@@ -6,7 +6,8 @@ const jwt = require('jsonwebtoken');
 const sendMail = require('../utils/sendMail');
 const crypto = require('crypto');
 const makeToken = require('uniqid')
-const { users } = require('../utils/contants')
+const { users } = require('../utils/contants');
+const path = require('path');
 
 
 // const register = asyncHandler(async (req, res) => {
@@ -206,7 +207,13 @@ const login = asyncHandler(async (req, res) => {
 
 const getCurrent = asyncHandler(async (req, res) => {
     const { _id } = req.user
-    const user = await User.findById(_id).select('-refreshToken -password')
+    const user = await User.findById(_id).select('-refreshToken -password').populate({
+        path: 'cart',
+        populate: {
+            path: 'product',
+            select: 'title thumb price'
+        }
+    })
     return res.status(200).json({
         success: user ? true : false,
         rs: user ? user : 'User not found'

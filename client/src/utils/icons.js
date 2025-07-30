@@ -4,7 +4,7 @@ import {
     MdWorkHistory,
     MdGroups
 } from 'react-icons/md';
-import { BsHandbagFill, BsFillSuitHeartFill, BsShieldShaded, BsReplyFill } from 'react-icons/bs';
+import { BsHandbagFill, BsFillSuitHeartFill, BsShieldShaded, BsReplyFill, BsFillCartCheckFill } from 'react-icons/bs';
 import { FaUserCircle, FaTty, FaHome, FaCartPlus, FaHeart, FaInfoCircle } from 'react-icons/fa';
 
 import {
@@ -52,7 +52,8 @@ const icons = {
     FaCartPlus,
     FaHeart,
     FaInfoCircle,
-    MdWorkHistory
+    MdWorkHistory,
+    BsFillCartCheckFill
 
 
 }

@@ -25,10 +25,19 @@ const Products = () => {
 
     const fetchProductsByCategory = async (queries) => {
         const response = await apiGetProducts({ ...queries, category })
+        // const response = await apiGetProducts(queries)
         if (response.success) {
             setProducts(response)
         }
     }
+
+
+    // const fetchProducts = async (queries) => {
+    //     const response = await apiGetProducts(queries)
+    //     if (response.success) {
+    //         setProducts(response)
+    //     }
+    // }
 
     useEffect(() => {
         //cách 1 thủ công
@@ -61,6 +70,7 @@ const Products = () => {
         const q = { ...priceQuery, ...queries }
 
         fetchProductsByCategory(q)
+        // fetchProducts(q)
         window.scrollTo(0, 0)
     }, [params])
 
@@ -83,13 +93,34 @@ const Products = () => {
                 }).toString()
             })
         }
-    }, [sort])
+    }, [sort]) // cách cũ của anh hịp
+
+
+    // useEffect(() => {
+    //     if (sort) {
+    //         if (category) {
+    //             navigate({
+    //                 pathname: `/${category}`,
+    //                 search: createSearchParams({
+    //                     sort: sort
+    //                 }).toString()
+    //             })
+    //         }
+    //     } else {
+    //         navigate({
+    //             pathname: `/products`,
+    //             search: createSearchParams({
+    //                 sort: sort
+    //             }).toString()
+    //         })
+    //     }
+    // }, [sort, category, navigate])
     return (
         <div className='w-full'>
             <div className='h-[81px] flex justify-center items-center bg-gray-100'>
                 <div className='w-main'>
-                    <h3 className='font-semibold uppercase'>{category}</h3>
-                    <Breadcrumb category={category} />
+                    <h3 className='font-semibold uppercase'>{category || 'ALL PRODUCTS'}</h3>
+                    <Breadcrumb category={category || 'ALL PRODUCTS'} />
                 </div>
             </div>
             <div>

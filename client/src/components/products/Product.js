@@ -8,16 +8,40 @@ import icons from 'utils/icons'
 import withBaseComponent from 'hocs/withBaseComponent'
 import { showModel } from 'store/app/appSlice'
 import { DetailProduct } from 'pages/All'
+import { apiUpdateCart } from 'apis'
+import { toast } from 'react-toastify'
+import { getCurrent } from 'store/user/asyncAction'
+import { useSelector } from 'react-redux'
+import Swal from 'sweetalert2'
+import path from 'utils/path'
+import { BsFillCartCheckFill } from 'react-icons/bs'
 
 const { AiFillEye, BsFillSuitHeartFill, FaCartPlus } = icons
 
 const Product = ({ productData, isNew, normal, navigate, dispatch }) => {
     const [isShowOption, setIsShowOption] = useState(false)
-    const handleClickOptions = (e, flag) => {
+    const { current } = useSelector(state => state.user)
+    const handleClickOptions = async (e, flag) => {
         e.stopPropagation()
         e.preventDefault()
         if (flag === 'CART') {
-
+            if (!current) return Swal.fire({
+                title: 'Please login to add to cart',
+                icon: 'warning',
+                showConfirmButton: true,
+                confirmButtonText: 'Login',
+                cancelButtonText: 'Cancel',
+                showCancelButton: true
+            }).then((result) => {
+                if (result.isConfirmed) navigate(`/${path.LOGIN}`)
+            })
+            const response = await apiUpdateCart({ pid: productData?._id, color: productData?.color })
+            if (response.success) {
+                toast.success(response.mes)
+            } else {
+                toast.error(response.mes)
+                dispatch(getCurrent())
+            }
         }
         if (flag === 'WISHLIST') {
             // Handle wishlist logic here
@@ -49,7 +73,10 @@ const Product = ({ productData, isNew, normal, navigate, dispatch }) => {
                         className='absolute bottom-[-10px] left-0 right-0 flex justify-center gap-2 animate-slide-top'
                     >
                         <span title='Quick View' onClick={(e) => handleClickOptions(e, 'QUICK_VIEW')}> <SelectOption icon={<AiFillEye />} /></span>
-                        <span title='Add to Cart' onClick={(e) => handleClickOptions(e, 'CART')}><SelectOption icon={<FaCartPlus />} /></span>
+                        {current?.cart?.some(el => el.product === productData._id)
+                            ? <span title='Added to Cart' ><SelectOption icon={<BsFillCartCheckFill color='gray' />} /></span>
+                            : <span title='Add to Cart' onClick={(e) => handleClickOptions(e, 'CART')}><SelectOption icon={<FaCartPlus />} /></span>
+                        }
                         <span title='Add to Wishlist' onClick={(e) => handleClickOptions(e, 'WISHLIST')}><SelectOption icon={<BsFillSuitHeartFill />} /></span>
                     </div>}
                     <img

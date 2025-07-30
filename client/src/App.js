@@ -10,7 +10,7 @@ import {
   Blogs,
   Products,
   FinalRegister,
-  ResetPassword
+  ResetPassword,
 } from 'pages/All'
 import {
   AdminLayout,
@@ -26,20 +26,27 @@ import { getCategories } from './store/app/asyncActions'
 import { useDispatch, useSelector } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Modal } from './components';
+import { Cart, Modal } from './components';
+import { showCart } from 'store/app/appSlice';
+// import ProductCategory from './pages/All/ProductCategory'; // Import trang theo category
 
 function App() {
   const dispatch = useDispatch()
-  const { isShowModal, modalChildren } = useSelector(state => state.app)
+  const { isShowModal, modalChildren, isShowCart } = useSelector(state => state.app)
   useEffect(() => {
     dispatch(getCategories())
   }, [dispatch])
   return (
     <div className="font-main h-screen">
+      {isShowCart && <div onClick={() => dispatch(showCart())} className='absolute inset-0 z-[50] bg-slate-900 bg-opacity-50 flex justify-end'>
+        <Cart />
+      </div>}
       {isShowModal && <Modal>{modalChildren}</Modal>}
       <Routes>
         <Route path={path.PUBLIC} element={<AllPublic />}>
           <Route path={path.HOME} element={<Home />} />
+          {/* <Route path={path.PRODUCTS} element={<Products />} />
+          <Route path={path.CATEGORY} element={<ProductCategory />} /> */}
           <Route path={path.BLOGS} element={<Blogs />} />
           <Route path={path.DETAIL_PRODUCT__CATEGORY__PID__TITLE} element={<DetailProduct />} />
           <Route path={path.FAQs} element={<FAQ />} />

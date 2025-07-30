@@ -3,14 +3,15 @@ import logo from 'assets/logo.png'
 import icons from 'utils/icons'
 import { Link } from 'react-router-dom'
 import path from 'utils/path'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { logout } from 'store/user/userSlice'
+import withBaseComponent from 'hocs/withBaseComponent'
+import { showCart } from 'store/app/appSlice'
 
 
-const Header = () => {
+const Header = ({ dispatch }) => {
     const { isLoggedIn, current } = useSelector(state => state.user)
     const [isShowOptions, setIsShowOptions] = useState(false)
-    const dispatch = useDispatch()
     // console.log('Redux state - current:', current);
     // console.log('Redux state - isLoggedIn:', isLoggedIn);
     const { RiPhoneFill, MdEmail, BsHandbagFill,
@@ -65,9 +66,9 @@ const Header = () => {
 
                 {isLoggedIn && current && (
                     <Fragment>
-                        <div className='cursor-pointer flex px-6 border-r items-center justify-center gap-2'>
+                        <div onClick={() => dispatch(showCart())} className='cursor-pointer flex px-6 border-r items-center justify-center gap-2'>
                             <BsHandbagFill color='red' />
-                            <span>0 items</span>
+                            <span>{`${current?.cart?.length || 0} items`}</span>
                         </div>
                         <div
                             className='cursor-pointer- flex px-6 justify-center items-center gap-2 relative'
@@ -96,4 +97,4 @@ const Header = () => {
     )
 }
 
-export default memo(Header)
+export default withBaseComponent(memo(Header))

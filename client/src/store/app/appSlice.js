@@ -11,11 +11,15 @@ export const appSlice = createSlice({
         isLoading: false,
         isShowModal: false,
         modalChildren: null,
+        isShowCart: false,
     },
     reducers: {
         showModel: (state, action) => {
             state.isShowModal = action.payload.isShowModal
             state.modalChildren = action.payload.modalChildren
+        },
+        showCart: (state) => {
+            state.isShowCart = state.isShowCart === false ? true : false
         }
     },
     extraReducers: (builder) => {
@@ -33,5 +37,5 @@ export const appSlice = createSlice({
     }
 })
 
-export const { increment, decrement, incrementByAmount, showModel } = appSlice.actions;
+export const { increment, decrement, incrementByAmount, showModel, showCart } = appSlice.actions;
 export default appSlice.reducer;
