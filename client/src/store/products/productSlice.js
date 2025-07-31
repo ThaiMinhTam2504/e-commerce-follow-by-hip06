@@ -9,6 +9,7 @@ export const productsSlice = createSlice({
     initialState: {
         newProducts: null,
         errorMessage: '',
+
     },
     reducers: {
 

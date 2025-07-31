@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, current } from "@reduxjs/toolkit";
 import * as actions from "./asyncAction";
 
 export const userSlice = createSlice({
@@ -8,7 +8,8 @@ export const userSlice = createSlice({
         current: null,
         token: null,
         isLoading: false,
-        mes: ''
+        mes: '',
+        currentCart: []
     },
     reducers: {
         login: (state, action) => {
@@ -24,6 +25,18 @@ export const userSlice = createSlice({
         },
         clearMessage: (state) => {
             state.mes = ''
+        },
+        updateCart: (state, action) => {
+            const { pid, quantity, color } = action.payload;
+            const updatingCart = JSON.parse(JSON.stringify(state.currentCart))
+            // console.log(updateCart)
+            const updatedCart = updatingCart.map(el => {
+                if (el.color === color && el.product?._id === pid) {
+                    return { ...el, quantity }
+                } else return el
+            })
+            state.currentCart = updatedCart.filter(el => el.quantity > 0)
+
         }
     },
     extraReducers: (builder) => {
@@ -34,6 +47,7 @@ export const userSlice = createSlice({
             state.isLoading = false;
             state.current = action.payload;  //cái action.payload này là cái response.rs ở asyncAction.js
             state.isLoggedIn = true;
+            state.currentCart = action.payload.cart
         })
         builder.addCase(actions.getCurrent.rejected, (state, action) => {
             state.isLoading = false;
@@ -44,5 +58,5 @@ export const userSlice = createSlice({
         })
     }
 })
-export const { login, logout, clearMessage } = userSlice.actions;
+export const { login, logout, clearMessage, updateCart } = userSlice.actions;
 export default userSlice.reducer;

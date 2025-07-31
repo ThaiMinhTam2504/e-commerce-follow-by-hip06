@@ -409,19 +409,38 @@ const updateUserAddress = asyncHandler(async (req, res) => {
 
 const updateCart = asyncHandler(async (req, res) => {
     const { _id } = req.user
-    const { pid, quantity = 1, color } = req.body
+    const { pid, quantity = 1, color, price, thumbnail, title, } = req.body
     if (!pid || !color) throw new Error('Missing input')
     const user = await User.findById(_id).select('cart')
     const alreadyProduct = user?.cart?.find(el => el.product.toString() === pid)
-    if (alreadyProduct) {
-        const response = await User.updateOne({ cart: { $elemMatch: alreadyProduct } }, { $set: { "cart.$.quantity": quantity, "cart.$.color": color } }, { new: true }).select('-password -role -refreshToken')
+    if (alreadyProduct && alreadyProduct.color === color) {
+        const response = await User.updateOne({ cart: { $elemMatch: alreadyProduct } }, {
+            $set: {
+                "cart.$.quantity": quantity,
+                "cart.$.price": price,
+                "cart.$thumbnail": thumbnail,
+                "cart.$.title": title
+
+            }
+        }, { new: true }).select('-password -role -refreshToken')
         return res.status(200).json({
             success: response ? true : false,
             mes: response ? 'Your cart has been updated!' : 'Something went wrong!'
 
         })
     } else {
-        const response = await User.findByIdAndUpdate(_id, { $push: { cart: { product: pid, quantity, color } } }, { new: true }).select('-password -role -refreshToken')
+        const response = await User.findByIdAndUpdate(_id, {
+            $push: {
+                cart: {
+                    product: pid,
+                    quantity,
+                    color,
+                    price,
+                    thumbnail,
+                    title
+                }
+            }
+        }, { new: true }).select('-password -role -refreshToken')
         return res.status(200).json({
             success: response ? true : false,
             mes: response ? 'Your cart has been updated!' : 'Something went wrong!'
@@ -431,14 +450,14 @@ const updateCart = asyncHandler(async (req, res) => {
 
 const removeProductFromCart = asyncHandler(async (req, res) => {
     const { _id } = req.user
-    const { pid } = req.params
+    const { pid, color } = req.params
     const user = await User.findById(_id).select('cart')
-    const alreadyProduct = user?.cart?.find(el => el.product.toString() === pid)
+    const alreadyProduct = user?.cart?.find(el => el.product.toString() === pid && el.color === color)
     if (!alreadyProduct) return res.status(200).json({
         success: true,
         mes: 'Product not found in cart'
     })
-    const response = await User.findByIdAndUpdate(_id, { $pull: { cart: { product: pid } } }, { new: true }).select('-password -role -refreshToken')
+    const response = await User.findByIdAndUpdate(_id, { $pull: { cart: { product: pid, color } } }, { new: true }).select('-password -role -refreshToken')
     return res.status(200).json({
         success: response ? true : false,
         mes: response ? 'Product removed from cart successfully!' : 'Something went wrong!'

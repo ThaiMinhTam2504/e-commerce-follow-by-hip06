@@ -15,10 +15,11 @@ import { useSelector } from 'react-redux'
 import Swal from 'sweetalert2'
 import path from 'utils/path'
 import { BsFillCartCheckFill } from 'react-icons/bs'
+import { createSearchParams } from 'react-router-dom'
 
 const { AiFillEye, BsFillSuitHeartFill, FaCartPlus } = icons
 
-const Product = ({ productData, isNew, normal, navigate, dispatch }) => {
+const Product = ({ productData, isNew, normal, navigate, dispatch, location }) => {
     const [isShowOption, setIsShowOption] = useState(false)
     const { current } = useSelector(state => state.user)
     const handleClickOptions = async (e, flag) => {
@@ -33,11 +34,15 @@ const Product = ({ productData, isNew, normal, navigate, dispatch }) => {
                 cancelButtonText: 'Cancel',
                 showCancelButton: true
             }).then((result) => {
-                if (result.isConfirmed) navigate(`/${path.LOGIN}`)
+                if (result.isConfirmed) navigate({
+                    pathname: `/${path.LOGIN}`,
+                    search: createSearchParams({ redirect: location.pathname }).toString()
+                })
             })
             const response = await apiUpdateCart({ pid: productData?._id, color: productData?.color })
             if (response.success) {
                 toast.success(response.mes)
+                dispatch(getCurrent())
             } else {
                 toast.error(response.mes)
                 dispatch(getCurrent())
@@ -74,7 +79,7 @@ const Product = ({ productData, isNew, normal, navigate, dispatch }) => {
                     >
                         <span title='Quick View' onClick={(e) => handleClickOptions(e, 'QUICK_VIEW')}> <SelectOption icon={<AiFillEye />} /></span>
                         {current?.cart?.some(el => el.product === productData._id)
-                            ? <span title='Added to Cart' ><SelectOption icon={<BsFillCartCheckFill color='gray' />} /></span>
+                            ? <span title='ADDED' ><SelectOption icon={<BsFillCartCheckFill color='gray' />} /></span>
                             : <span title='Add to Cart' onClick={(e) => handleClickOptions(e, 'CART')}><SelectOption icon={<FaCartPlus />} /></span>
                         }
                         <span title='Add to Wishlist' onClick={(e) => handleClickOptions(e, 'WISHLIST')}><SelectOption icon={<BsFillSuitHeartFill />} /></span>

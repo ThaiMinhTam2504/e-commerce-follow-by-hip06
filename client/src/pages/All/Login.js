@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react'
 import { InputField, Button, Loader } from '../../components'
 import { apiRegister, apiLogin, apiForgotPassword, apiFinalRegister, apiDeleteTemporaryAccount } from '../../apis/user'
 import Swal from 'sweetalert2'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate, Link, useSearchParams } from 'react-router-dom'
 import path from '../../utils/path'
 import { login } from '../../store/user/userSlice'
 import { showModel } from 'store/app/appSlice'
@@ -37,6 +37,9 @@ const Login = () => {
         })
     }
     const [email, setEmail] = useState('')
+    const [searchParams] = useSearchParams()
+
+
     const handleForgotPassword = async () => {
         const response = await apiForgotPassword({ email })
         if (response.success) {
@@ -75,7 +78,7 @@ const Login = () => {
                     const rs = await apiLogin(data)
                     if (rs.success) {
                         dispatch(login({ isLoggedIn: true, token: rs.accessToken, userData: rs.userData }))
-                        navigate(`/${path.HOME}`)
+                        searchParams.get('redirect') ? navigate(searchParams.get('redirect')) : navigate(`/${path.HOME}`)
                     } else Swal.fire('Opps!', rs.mes, 'error')
                 }
                 catch (error) {
