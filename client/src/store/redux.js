@@ -35,7 +35,7 @@ const commonConfig = {
 }
 const userConfig = {
   ...commonConfig,
-  whitelist: ['isLoggedIn', 'token', 'current'] //lưu vào localStorage để tránh khi refresh lại bị mất thì do đó dẫn đến xử lý login phân quyền bị lỗi (all public, member,admin)
+  whitelist: ['isLoggedIn', 'token', 'current', 'currentCart'] //lưu vào localStorage để tránh khi refresh lại bị mất thì do đó dẫn đến xử lý login phân quyền bị lỗi (all public, member,admin)
 }
 
 const store = configureStore({

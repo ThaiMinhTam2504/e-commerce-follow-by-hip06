@@ -52,7 +52,7 @@ const Cart = ({ dispatch, navigate }) => {
                 <Button
                     handleOnClick={() => {
                         dispatch(showCart())
-                        navigate(`/${path.DETAIL_CART}`)
+                        navigate(`/${path.MEMBER}/${path.DETAIL_CART}`)
                     }}
                     style={'rounded-none w-full bg-main p-3 mt-3'}>
                     Edit Cart

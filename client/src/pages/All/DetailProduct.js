@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback, useRef } from 'react'
 import { createSearchParams, useParams } from 'react-router-dom'
 import { apiGetProduct, apiGetProducts } from '../../apis/product'
 import { Breadcrumb, Button, SelectQuantity, ProductExtraInfoItem, ProductInfomation, CustomSlider, SearchItem } from '../../components'
@@ -25,6 +25,7 @@ const settings = {
 }
 
 const DetailProduct = ({ isQuickView, data, location, navigate, dispatch }) => {
+    const titleRef = useRef()
     const params = useParams()
     const { current } = useSelector(state => state.user)
     const [product, setProduct] = useState(null)
@@ -93,7 +94,8 @@ const DetailProduct = ({ isQuickView, data, location, navigate, dispatch }) => {
             fetchProducts()
         }
         window.scrollTo(0, 0)
-    }, [pid])
+        titleRef.current.scrollIntoView({ behavior: 'smooth' })
+    }, [pid, params.pid])
     useEffect(() => {
         if (pid) fetchProductData()
     }, [update])
@@ -154,10 +156,12 @@ const DetailProduct = ({ isQuickView, data, location, navigate, dispatch }) => {
             toast.error(response.mes)
         }
     }
+
+
     return (
         <div className={clsx('w-full')}>
             {!isQuickView && <div className='h-[81px] bg-gray-100 flex justify-center items-center'>
-                <div className='w-main'>
+                <div ref={titleRef} className='w-main'>
                     <h3 className='font-semibold'>{currentProduct.title || product?.title}</h3>
                     <Breadcrumb title={currentProduct.title || product?.title} category={category} />
                 </div>
@@ -222,6 +226,7 @@ const DetailProduct = ({ isQuickView, data, location, navigate, dispatch }) => {
                     {/* <img src={product?.images} alt="product" className='h-[458px] w-[458px] object-cover border' /> */}
 
                     <div className='w-[458px]'>
+
                         <Slider className='image-silder flex gap-2 justify-between'  {...settings}>
                             {/* {currentProduct.images.length == 0 && product?.images.map(el => (
                                 <div key={el} className='flex-1'>
@@ -251,7 +256,10 @@ const DetailProduct = ({ isQuickView, data, location, navigate, dispatch }) => {
                                     />
                                 </div>
                             ))}
+
+
                         </Slider>
+
                     </div>
                 </div>
                 <div className={clsx('w-2/5 pr-[24px] flex flex-col gap-4', isQuickView && 'w-1/2')}>

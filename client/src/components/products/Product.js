@@ -28,6 +28,7 @@ const Product = ({ productData, isNew, normal, navigate, dispatch, location }) =
         if (flag === 'CART') {
             if (!current) return Swal.fire({
                 title: 'Please login to add to cart',
+                text: 'You need to login to add products to your cart.',
                 icon: 'warning',
                 showConfirmButton: true,
                 confirmButtonText: 'Login',
@@ -39,14 +40,22 @@ const Product = ({ productData, isNew, normal, navigate, dispatch, location }) =
                     search: createSearchParams({ redirect: location.pathname }).toString()
                 })
             })
-            const response = await apiUpdateCart({ pid: productData?._id, color: productData?.color })
+            const response = await apiUpdateCart({
+                pid: productData?._id,
+                color: productData?.color || 'default',
+                quantity: 1,
+                price: productData?.price,
+                thumbnail: productData?.thumb,
+                title: productData?.title
+            })
             if (response.success) {
                 toast.success(response.mes)
                 dispatch(getCurrent())
-            } else {
-                toast.error(response.mes)
-                dispatch(getCurrent())
             }
+            else {
+                toast.error(response.mes)
+            }
+
         }
         if (flag === 'WISHLIST') {
             // Handle wishlist logic here

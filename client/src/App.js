@@ -21,7 +21,7 @@ import {
   Dashboard,
   ManageUsers
 } from 'pages/admin'
-import { MemberLayout, Personal, History, MyCart, WishList } from 'pages/member';
+import { MemberLayout, Personal, History, MyCart, WishList, Checkout } from 'pages/member';
 import path from './utils/path';
 import { getCategories } from './store/app/asyncActions'
 import { useDispatch, useSelector } from 'react-redux';
@@ -44,17 +44,16 @@ function App() {
       </div>}
       {isShowModal && <Modal>{modalChildren}</Modal>}
       <Routes>
+        <Route path={path.CHECKOUT} element={<Checkout />} />
         <Route path={path.PUBLIC} element={<AllPublic />}>
           <Route path={path.HOME} element={<Home />} />
-          {/* <Route path={path.PRODUCTS} element={<Products />} />
-          <Route path={path.CATEGORY} element={<ProductCategory />} /> */}
           <Route path={path.BLOGS} element={<Blogs />} />
           <Route path={path.DETAIL_PRODUCT__CATEGORY__PID__TITLE} element={<DetailProduct />} />
           <Route path={path.FAQs} element={<FAQ />} />
           <Route path={path.OUR_SERVICES} element={<Services />} />
-          <Route path={path.PRODUCTS} element={<Products />} />
+          <Route path={path.PRODUCTS__CATEGORY} element={<Products />} />
           <Route path={path.RESET_PASSWORD} element={<ResetPassword />} />
-          <Route path={path.DETAIL_CART} element={<DetailCart />} />
+          {/* <Route path={path.DETAIL_CART} element={<DetailCart />} /> */}
           <Route path={path.ALL} element={<Home />} />
         </Route>
         <Route path={path.ADMIN} element={<AdminLayout />}>
@@ -67,7 +66,8 @@ function App() {
 
         <Route path={path.MEMBER} element={<MemberLayout />}>
           <Route path={path.PERSONAL} element={<Personal />} />
-          <Route path={path.MY_CART} element={<MyCart props={'test_HOC'} />} />
+          {/* <Route path={path.MY_CART} element={<MyCart props={'test_HOC'} />} /> */}
+          <Route path={path.MY_CART} element={<DetailCart />} />
           <Route path={path.HISTORY} element={<History />} />
           <Route path={path.WISHLIST} element={<WishList />} />
         </Route>

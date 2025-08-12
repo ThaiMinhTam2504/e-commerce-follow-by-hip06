@@ -43,7 +43,8 @@ const Personal = () => {
             lastname: current?.lastname,
             email: current?.email,
             mobile: current?.mobile,
-            avatar: current?.avatar
+            avatar: current?.avatar,
+            address: current?.address
         })
         setPreviewAvatar(null)
     }, [current, reset])
@@ -111,6 +112,13 @@ const Personal = () => {
                             message: 'Invalid mobile number format'
                         }
                     }}
+                />
+                <InputForm
+                    label={'Address'}
+                    id='address'
+                    register={register}
+                    errors={errors}
+                    validate={{ required: 'Address is required' }}
                 />
                 <div className='flex items-center gap-2'>
                     <span className='font-medium'>Account status:</span>

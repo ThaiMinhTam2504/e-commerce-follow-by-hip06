@@ -4,22 +4,21 @@ const mongoose = require('mongoose'); // Erase if already required
 var orderSchema = new mongoose.Schema({
     products: [
         {
-            product: { type: mongoose.Types.ObjectId, ref: 'Product' },
-            count: Number,
+            products: { type: mongoose.Types.ObjectId, ref: 'Product' },
+            quantity: Number,
             color: String,
+            price: Number,
+            thumbnail: String,
+            title: String
         }
     ],
     status: {
         type: String,
-        default: "Processing",
-        enum: ['Cancelled', 'Processing', 'Succeeded'],
+        default: "Cancelled",
+        enum: ['Cancelled', 'Success'],
     },
     total: {
         type: Number,
-    },
-    coupon: {
-        type: mongoose.Types.ObjectId,
-        ref: 'Coupon'
     },
     orderBy: {
         type: mongoose.Types.ObjectId,

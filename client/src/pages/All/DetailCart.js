@@ -3,8 +3,10 @@ import OrderItem from 'components/products/OrderItem'
 import withBaseComponent from 'hocs/withBaseComponent'
 import React, { useCallback, useState } from 'react'
 import { useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 import { updateCart } from 'store/user/userSlice'
 import { formatMoney } from 'utils/helper'
+import path from 'utils/path'
 
 const DetailCart = ({ dispatch, location }) => {
     const { currentCart } = useSelector(state => state.user)
@@ -19,8 +21,8 @@ const DetailCart = ({ dispatch, location }) => {
         <div className='w-full'>
             <div className='h-[81px] flex justify-center items-center bg-gray-100'>
                 <div className='w-main'>
-                    <h3 className='font-semibold  uppercase'>My Cart</h3>
-                    <Breadcrumb category={location?.pathname?.replace('/', '')?.split('-')?.join(` `)} />
+                    <h3 className='font-semibold text-2xl uppercase'>My Cart</h3>
+                    {/* <Breadcrumb category={location?.pathname?.replace('/', '')?.split('-')?.join(` `)} /> */}
                 </div>
             </div>
             <div className='flex flex-col border my-8 w-main mx-auto'>
@@ -33,7 +35,12 @@ const DetailCart = ({ dispatch, location }) => {
                     <OrderItem key={el._id}
                         // handleChangeQuantities={handleChangeQuantities}
                         el={el}
-                        defaultQuantity={el.quantity}
+                        dfQuantity={el.quantity}
+                        color={el.color}
+                        title={el.title}
+                        thumbnail={el.thumbnail}
+                        price={el.price}
+                        pid={el.product?._id}
                     />
                 ))}
             </div>
@@ -43,7 +50,7 @@ const DetailCart = ({ dispatch, location }) => {
                     <span className='text-main font-bold'>{formatMoney(currentCart?.reduce((sum, el) => +el.price * el.quantity + sum, 0))}</span>
                 </span>
                 <span className='text-gray-500 text-xs italic'>Shipping, taxes, and discounts calculated at checkout</span>
-                <Button>Checkout</Button>
+                <Link target='_blank' className='bg-main text-white px-4 py-2 rounded-md' to={`/${path.CHECKOUT}`}>Checkout</Link>
             </div>
         </div>
     )

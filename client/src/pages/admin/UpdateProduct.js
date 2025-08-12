@@ -7,6 +7,7 @@ import { validate, getBase64 } from 'utils/helper'
 import { apiUpdateProduct } from 'apis'
 import { showModel } from 'store/app/appSlice'
 import { useDispatch, useSelector } from 'react-redux'
+import { formatMoneyInput } from 'utils/helper'
 
 
 const UpdateProduct = ({ editProduct, render, setEditProduct }) => {
@@ -53,12 +54,18 @@ const UpdateProduct = ({ editProduct, render, setEditProduct }) => {
         // if (!files || typeof files !== 'object' || !files.length) return;
 
         const imagesPreview = []
+        const thumb = preview.thumb?.trim();
         for (let file of files) {
             if (file.type !== 'image/png' && file.type !== 'image/jpeg' && file.type !== 'image/jpg') {
                 toast.warning('Only PNG, JPEG, and JPG files are allowed.')
                 return
             }
             const base64 = await getBase64(file)
+            // Nếu ảnh trùng với thumbnail thì cảnh báo và bỏ qua
+            if (base64.trim() === thumb) {
+                toast.warning('Product images cannot be the same as the thumbnail!');
+                continue;
+            }
             imagesPreview.push(base64)
         }
         if (imagesPreview.length > 0) setPreview(prev => ({ ...prev, images: imagesPreview }))
@@ -161,7 +168,6 @@ const UpdateProduct = ({ editProduct, render, setEditProduct }) => {
                         style='flex-auto'
                         placeholder='Enter product price'
                         type='number'
-
                     />
                     <InputForm
                         label='Quantity'
@@ -222,13 +228,13 @@ const UpdateProduct = ({ editProduct, render, setEditProduct }) => {
                 />
                 <div className='flex flex-col gap-2 mt-8 ml-6'>
                     <label
-                        className='font-semibold text-blue-600 mb-1 uppercase tracking-wide'
+                        className='font-semibold mb-1 uppercase tracking-wide'
                     >
                         Upload thumbnail
                     </label>
                     <label
                         htmlFor='thumb'
-                        className='cursor-pointer px-4 py-2 bg-blue-500 text-white rounded w-fit font-medium shadow transition duration-200 hover:bg-blue-300 hover:scale-105'
+                        className='cursor-pointer px-4 py-2 bg-main text-white rounded w-fit font-medium shadow transition duration-200 hover:bg-blue-300 hover:scale-105'
                     >
                         Choose a thumbnail
                     </label>
@@ -252,13 +258,13 @@ const UpdateProduct = ({ editProduct, render, setEditProduct }) => {
 
                 <div className='flex flex-col gap-2 mt-8 ml-6'>
                     <label
-                        className='font-semibold text-blue-600 mb-1 uppercase tracking-wide relative'
+                        className='font-semibold  mb-1 uppercase tracking-wide relative'
                     >
                         Upload images of product <small className='text-gray-500 absolute top-1 left-[240px] text-xs ml-1'>(Hold Ctrl to select multiple images)</small>
                     </label>
                     <label
                         htmlFor='products'
-                        className='cursor-pointer px-4 py-2 bg-blue-500 text-white rounded w-fit  font-medium shadow transition duration-200 hover:bg-blue-300 hover:scale-105'
+                        className='cursor-pointer px-4 py-2 bg-main text-white rounded w-fit  font-medium shadow transition duration-200 hover:bg-blue-300 hover:scale-105'
                     >
                         Choose product images
                     </label>

@@ -21,23 +21,15 @@ const Products = () => {
     const [params] = useSearchParams()
     const [sort, setSort] = useState('')
     const { category } = useParams()
-    console.log("category:", category)
+    // console.log("category:", category)
 
     const fetchProductsByCategory = async (queries) => {
-        const response = await apiGetProducts({ ...queries, category })
-        // const response = await apiGetProducts(queries)
+        if (category && category !== 'products') queries.category = category
+        const response = await apiGetProducts(queries)
         if (response.success) {
             setProducts(response)
         }
     }
-
-
-    // const fetchProducts = async (queries) => {
-    //     const response = await apiGetProducts(queries)
-    //     if (response.success) {
-    //         setProducts(response)
-    //     }
-    // }
 
     useEffect(() => {
         //cách 1 thủ công
