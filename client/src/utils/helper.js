@@ -5,7 +5,16 @@ const { AiOutlineStar, AiFillStar } = icons
 export const createSlug = string => string.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").split(' ').join('-')
 // export const formatMoney = number => Number(number.toFixed(1).toLocaleString())
 export const formatMoney = number => {
-    return number.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+    // return number.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }); cach cu
+    if (!number && number !== 0) return '$0'; // Handle undefined/null
+    // return Number(number).toLocaleString('en-US', {
+    //     style: 'currency',
+    //     currency: 'USD'
+    // });
+    return Number(number).toLocaleString('vi-VN', {
+        style: 'currency',
+        currency: 'VND'
+    });
 }
 export const renderStarFromNumber = (number, size) => {
     if (!Number(number)) return

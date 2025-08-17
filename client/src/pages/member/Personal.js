@@ -10,10 +10,13 @@ import { useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
 import { getCurrent } from 'store/user/asyncAction';
 import { showModel } from 'store/app/appSlice'
+import { useSearchParams } from 'react-router-dom'
+import withBaseComponent from 'hocs/withBaseComponent'
 
 
-const Personal = () => {
+const Personal = ({ navigate }) => {
     const dispatch = useDispatch()
+    const [searchParams] = useSearchParams()
     const { register, handleSubmit, formState: { errors, isDirty }, reset, watch } = useForm()
     const { current } = useSelector(state => state.user)
     const [previewAvatar, setPreviewAvatar] = useState(null)
@@ -63,6 +66,9 @@ const Personal = () => {
         if (response.success) {
             dispatch(getCurrent())
             toast.success(response.mes)
+            if (searchParams.get('redirect')) {
+                navigate(searchParams.get('redirect'))
+            }
         } else {
             console.log(response)
             toast.error(response.mes || 'Something went wrong!')
@@ -158,4 +164,4 @@ const Personal = () => {
     )
 }
 
-export default Personal
+export default withBaseComponent(Personal)

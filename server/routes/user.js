@@ -19,11 +19,12 @@ router.get('/', [verifyToken, isAdmin], ctrls.getUsers) // bỏ vào [] tức l�
 router.delete('/:uid', [verifyToken, isAdmin], ctrls.deleteUser)
 router.put('/current', [verifyToken], uploader.single('avatar'), ctrls.updateUser)
 router.put('/:uid', [verifyToken, isAdmin], ctrls.updateUserByAdmin)
+router.put('/wishlist/:pid', [verifyToken], ctrls.updateWishList)
 router.delete('/delete-temporary-account', ctrls.deleteTemporaryAccount)
 router.delete('/remove-cart/:pid/:color', [verifyToken], ctrls.removeProductFromCart)
 
 
-
+//Kinh nghiem suong mau: route ma co params nen de o duoi
 module.exports = router
 
 //CRUD | Create - Read - Update - Delete | POST - GET - PUT - DELETE

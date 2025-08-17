@@ -8,7 +8,7 @@ import icons from 'utils/icons'
 import withBaseComponent from 'hocs/withBaseComponent'
 import { showModel } from 'store/app/appSlice'
 import { DetailProduct } from 'pages/All'
-import { apiUpdateCart } from 'apis'
+import { apiUpdateCart, apiUpdateWishList } from 'apis'
 import { toast } from 'react-toastify'
 import { getCurrent } from 'store/user/asyncAction'
 import { useSelector } from 'react-redux'
@@ -16,10 +16,20 @@ import Swal from 'sweetalert2'
 import path from 'utils/path'
 import { BsFillCartCheckFill } from 'react-icons/bs'
 import { createSearchParams } from 'react-router-dom'
+import clsx from 'clsx'
 
 const { AiFillEye, BsFillSuitHeartFill, FaCartPlus } = icons
 
-const Product = ({ productData, isNew, normal, navigate, dispatch, location }) => {
+const Product = ({
+    productData,
+    isNew,
+    normal,
+    navigate,
+    dispatch,
+    location,
+    pid,
+    classname
+}) => {
     const [isShowOption, setIsShowOption] = useState(false)
     const { current } = useSelector(state => state.user)
     const handleClickOptions = async (e, flag) => {
@@ -58,8 +68,14 @@ const Product = ({ productData, isNew, normal, navigate, dispatch, location }) =
 
         }
         if (flag === 'WISHLIST') {
-            // Handle wishlist logic here
-            console.log('Add to wishlist', productData._id)
+            // console.log("pid:", pid)
+            const response = await apiUpdateWishList(pid)
+            if (response.success) {
+                dispatch(getCurrent())
+                toast.success(response.mes)
+            } else {
+                toast.error(response.mes)
+            }
         }
         if (flag === 'QUICK_VIEW') {
             dispatch(showModel({
@@ -69,7 +85,7 @@ const Product = ({ productData, isNew, normal, navigate, dispatch, location }) =
         }
     }
     return (
-        <div className='w-full text-base px-[10px]'>
+        <div className={clsx('w-full text-base px-[10px]', classname)}>
             <div
                 onClick={() => navigate(`/${productData.category?.toLowerCase()}/${productData?._id}/${productData?.title}`)}
                 className='w-full border p-[15px] flex flex-col items-center'
@@ -91,7 +107,7 @@ const Product = ({ productData, isNew, normal, navigate, dispatch, location }) =
                             ? <span title='ADDED' ><SelectOption icon={<BsFillCartCheckFill color='gray' />} /></span>
                             : <span title='Add to Cart' onClick={(e) => handleClickOptions(e, 'CART')}><SelectOption icon={<FaCartPlus />} /></span>
                         }
-                        <span title='Add to Wishlist' onClick={(e) => handleClickOptions(e, 'WISHLIST')}><SelectOption icon={<BsFillSuitHeartFill />} /></span>
+                        <span title='Add to Wishlist' onClick={(e) => handleClickOptions(e, 'WISHLIST')}><SelectOption icon={<BsFillSuitHeartFill color={current?.whistlist?.some(item => item._id === pid) ? 'red' : 'gray'} />} /></span>
                     </div>}
                     <img
                         src={productData?.thumb || 'https://apollobattery.com.au/wp-content/uploads/2022/08/default-product-image.png'}

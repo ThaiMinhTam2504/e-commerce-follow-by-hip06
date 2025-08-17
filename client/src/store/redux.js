@@ -30,18 +30,26 @@ import userReducer from './user/userSlice';
 
 
 const commonConfig = {
-  key: 'shop/user',
+
   storage
 }
 const userConfig = {
   ...commonConfig,
+  key: 'shop/user',
   whitelist: ['isLoggedIn', 'token', 'current', 'currentCart'] //lưu vào localStorage để tránh khi refresh lại bị mất thì do đó dẫn đến xử lý login phân quyền bị lỗi (all public, member,admin)
+}
+
+const productConfig = {
+  ...commonConfig,
+  key: 'shop/deal',
+  whitelist: ['dealDaily'] //lưu vào localStorage để tránh khi refresh lại bị mất thì do đó dẫn đến xử lý login phân quyền bị lỗi (all public, member,admin)
 }
 
 const store = configureStore({
   reducer: {
     app: appReducer,
-    products: productsReducer,
+    // products: productsReducer,
+    products: persistReducer(productConfig, productsReducer),
     user: persistReducer(userConfig, userReducer)
   },
   middleware: (getDefaultMiddleware) =>

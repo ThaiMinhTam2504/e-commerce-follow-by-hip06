@@ -94,7 +94,10 @@ const DetailProduct = ({ isQuickView, data, location, navigate, dispatch }) => {
             fetchProducts()
         }
         window.scrollTo(0, 0)
-        titleRef.current.scrollIntoView({ behavior: 'smooth' })
+        // Kiểm tra titleRef.current tồn tại và không phải quickview
+        if (titleRef.current && !isQuickView) {
+            titleRef.current.scrollIntoView({ behavior: 'smooth' })
+        }
     }, [pid, params.pid])
     useEffect(() => {
         if (pid) fetchProductData()
@@ -159,75 +162,84 @@ const DetailProduct = ({ isQuickView, data, location, navigate, dispatch }) => {
 
 
     return (
-        <div className={clsx('w-full')}>
+        <div ref={titleRef} className={clsx('w-full')}>
             {!isQuickView && <div className='h-[81px] bg-gray-100 flex justify-center items-center'>
-                <div ref={titleRef} className='w-main'>
+                <div className='w-main'>
                     <h3 className='font-semibold'>{currentProduct.title || product?.title}</h3>
                     <Breadcrumb title={currentProduct.title || product?.title} category={category} />
                 </div>
             </div>}
             <div onClick={e => e.stopPropagation()} className={clsx('bg-white m-auto mt-4 flex', isQuickView ? 'max-w-[1000px] gap-16 p-8 max-h-[80vh] overflow-y-auto' : 'w-main')}>
                 <div className={clsx('flex flex-col gap-4 w-2/5', isQuickView && 'w-1/2')}>
-                    <div className='h-[458px] w-[458px] border flex items-center justify-center bg-white rounded-lg shadow-lg'>
-                        <ReactImageMagnify {...{
-                            smallImage: {
-                                alt: currentProduct.title || 'Product Image',
-                                // src: product?.thumb,
-                                src: currentImage || currentProduct.thumb,
-                                isFluidWidth: false,
-                                width: 420,
-                                height: 420,
-                                style: {
-                                    objectFit: 'contain',
-                                    borderRadius: '10px',
-                                    background: '#fff',
-                                    // borderRadius: '1rem',
-                                    // border: '3px solid #60a5fa',
-                                    // boxShadow: '0 4px 24px 0 rgba(0, 0, 0, 0.1)',
-                                    // backgroundColor: 'red'
-                                }
-                            },
-                            largeImage: {
-                                // src: product?.thumb,
-                                // src: currentProduct.images || currentImage,
-                                // width: 2000,
-                                // height: 1200
-                                src: currentImage || currentProduct.thumb,
-                                width: 2000,
-                                height: 1200
-                            },
-                            enlargedImageContainerDimensions: {
-                                width: "360%", // Hoặc 100%
-                                height: "100%"
-                                // width: '320px',
-                                // height: '320px'
-                            },
-                            enlargedImageStyle: {
-                                objectFit: 'contain',
-                                borderRadius: '8px',
-                                background: '#fff'
-                            },
-                            lensStyle: {
-                                // width: "50px",
-                                // height: "50px",
-                                // borderRadius: "0px"
+                    <div className={clsx('border flex items-center justify-center bg-white rounded-lg shadow-lg', isQuickView ? 'w-[350px] h-[350px]' : 'w-[458px] h-[458px]')}>
+                        {isQuickView ? (
+                            <img
+                                src={currentImage || currentProduct.thumb}
+                                alt={currentProduct.title || 'Product Image'}
+                                className='w-[280px] h-[280px] object-contain rounded-lg'
+                            />
+                        ) :
+                            (
+                                <ReactImageMagnify {...{
+                                    smallImage: {
+                                        alt: currentProduct.title || 'Product Image',
+                                        // src: product?.thumb,
+                                        src: currentImage || currentProduct.thumb,
+                                        isFluidWidth: false,
+                                        width: 420,
+                                        height: 420,
+                                        style: {
+                                            objectFit: 'contain',
+                                            borderRadius: '10px',
+                                            background: '#fff',
+                                            // borderRadius: '1rem',
+                                            // border: '3px solid #60a5fa',
+                                            // boxShadow: '0 4px 24px 0 rgba(0, 0, 0, 0.1)',
+                                            // backgroundColor: 'red'
+                                        }
+                                    },
+                                    largeImage: {
+                                        // src: product?.thumb,
+                                        // src: currentProduct.images || currentImage,
+                                        // width: 2000,
+                                        // height: 1200
+                                        src: currentImage || currentProduct.thumb,
+                                        width: 2000,
+                                        height: 1200
+                                    },
+                                    enlargedImageContainerDimensions: {
+                                        width: "360%", // Hoặc 100%
+                                        height: "100%"
+                                        // width: '320px',
+                                        // height: '320px'
+                                    },
+                                    enlargedImageStyle: {
+                                        objectFit: 'contain',
+                                        borderRadius: '8px',
+                                        background: '#fff'
+                                    },
+                                    lensStyle: {
+                                        // width: "50px",
+                                        // height: "50px",
+                                        // borderRadius: "0px"
 
-                                background: 'rgba(0,0,0,0.1)',
-                                border: '2px solid #3182ce',
-                                width: '140px',
-                                height: '140px',
-                                borderRadius: '8px'
-                            },
-                            isHintEnabled: true,
-                            shouldUsePositiveSpaceLens: true,
+                                        background: 'rgba(0,0,0,0.1)',
+                                        border: '2px solid #3182ce',
+                                        width: '140px',
+                                        height: '140px',
+                                        borderRadius: '8px'
+                                    },
+                                    isHintEnabled: true,
+                                    shouldUsePositiveSpaceLens: true,
 
-                        }} />
+                                }} />
+                            )}
                     </div>
-                    {/* <img src={product?.images} alt="product" className='h-[458px] w-[458px] object-cover border' /> */}
+                    {/* <img src={product?.images} alt="product" className='h-[30px] w-[30px] object-cover border' /> */}
 
-                    <div className='w-[458px]'>
+                    <div className={clsx(isQuickView ? 'w-[300px] h-[150px]' : 'w-[458px]')}>
 
-                        <Slider className='image-silder flex gap-2 justify-between'  {...settings}>
+                        <Slider className='image-silder flex gap-2 justify-between'  {...{ ...settings, slidesToShow: isQuickView ? 2 : 3 }} >
                             {/* {currentProduct.images.length == 0 && product?.images.map(el => (
                                 <div key={el} className='flex-1'>
                                     <img onClick={e => handleClickImage(e, el)} src={el} alt='sub-product' className='h-[143px] w-[143px] border object-cover cursor-pointer' />
@@ -251,7 +263,8 @@ const DetailProduct = ({ isQuickView, data, location, navigate, dispatch }) => {
                                         alt='sub-product'
                                         className={clsx(
                                             'h-[143px] w-[143px] border object-cover cursor-pointer rounded-lg shadow-md transition-all duration-200 hover:border-blue-400 hover:scale-105',
-                                            currentImage === el && 'border-2 border-blue-500 ring-2 ring-blue-300 sclae-105'
+                                            isQuickView ? 'h-[100px] w-[100px]' : 'h-[143px] w-[143px]', currentImage === el && 'border-2 border-blue-500 ring-2 ring-blue-300 sclae-105'
+
                                         )}
                                     />
                                 </div>

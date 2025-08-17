@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback, useRef } from 'react'
 import { useParams, useSearchParams, useNavigate, createSearchParams } from 'react-router-dom'
 import { Breadcrumb, Product, SearchItem, InputSelect, Pagination } from '../../components'
 import { apiGetProducts } from '../../apis'
@@ -15,6 +15,7 @@ const breakpointColumnsObj = {
 
 
 const Products = () => {
+    const titleRef = useRef()
     const navigate = useNavigate()
     const [products, setProducts] = useState(null)
     const [activeClick, setActiveClick] = useState(null)
@@ -64,6 +65,9 @@ const Products = () => {
         fetchProductsByCategory(q)
         // fetchProducts(q)
         window.scrollTo(0, 0)
+        if (titleRef.current) {
+            titleRef.current.scrollIntoView({ behavior: 'smooth' })
+        }
     }, [params])
 
     const changeActiveFilter = useCallback((name) => {
@@ -111,7 +115,7 @@ const Products = () => {
         <div className='w-full'>
             <div className='h-[81px] flex justify-center items-center bg-gray-100'>
                 <div className='w-main'>
-                    <h3 className='font-semibold uppercase'>{category || 'ALL PRODUCTS'}</h3>
+                    <h3 ref={titleRef} className='font-semibold uppercase'>{category || 'ALL PRODUCTS'}</h3>
                     <Breadcrumb category={category || 'ALL PRODUCTS'} />
                 </div>
             </div>
@@ -157,7 +161,7 @@ const Products = () => {
                         {products?.products?.map(el => (
                             <Product
                                 key={el._id}
-                                pid={el.id}
+                                pid={el._id}
                                 productData={el}
                                 normal={true}
                             />

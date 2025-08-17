@@ -207,13 +207,14 @@ const login = asyncHandler(async (req, res) => {
 
 const getCurrent = asyncHandler(async (req, res) => {
     const { _id } = req.user
-    const user = await User.findById(_id).select('-refreshToken -password').populate({
-        path: 'cart',
-        populate: {
-            path: 'product',
-            select: 'title thumb price'
-        }
-    })
+    const user = await User.findById(_id).select('-refreshToken -password')
+        .populate({
+            path: 'cart',
+            populate: {
+                path: 'product',
+                select: 'title thumb price'
+            }
+        }).populate('whistlist', 'title thumb price color')
     return res.status(200).json({
         success: user ? true : false,
         rs: user ? user : 'User not found'
@@ -472,6 +473,35 @@ const createUsers = asyncHandler(async (req, res) => {
     })
 })
 
+const updateWishList = asyncHandler(async (req, res) => {
+    const { pid } = req.params
+    const { _id } = req.user
+    const user = await User.findById(_id)
+    const alreadyInWishList = user?.whistlist?.find(el => el.toString() === pid)
+    if (alreadyInWishList) {
+        const response = await User.findByIdAndUpdate(
+            _id,
+            { $pull: { whistlist: pid } },
+            { new: true }
+        )
+        return res.json({
+            success: response ? true : false,
+            mes: response ? 'Product removed from wishlist successfully!' : 'Something went wrong!'
+        })
+    } else {
+        const response = await User.findByIdAndUpdate(
+            _id,
+            { $push: { whistlist: pid } },
+            { new: true }
+        )
+        return res.json({
+            success: response ? true : false,
+            mes: response ? 'Product added to wishlist successfully!' : 'Something went wrong!'
+        })
+    }
+
+})
+
 module.exports = {
     register,
     login,
@@ -489,5 +519,6 @@ module.exports = {
     finalRegister,
     deleteTemporaryAccount,
     createUsers,
-    removeProductFromCart
+    removeProductFromCart,
+    updateWishList
 }

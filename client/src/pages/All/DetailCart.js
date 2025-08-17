@@ -3,19 +3,44 @@ import OrderItem from 'components/products/OrderItem'
 import withBaseComponent from 'hocs/withBaseComponent'
 import React, { useCallback, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { createSearchParams, Link } from 'react-router-dom'
 import { updateCart } from 'store/user/userSlice'
+import Swal from 'sweetalert2'
 import { formatMoney } from 'utils/helper'
 import path from 'utils/path'
 
-const DetailCart = ({ dispatch, location }) => {
-    const { currentCart } = useSelector(state => state.user)
+const DetailCart = ({ dispatch, location, navigate }) => {
+    const { currentCart, current } = useSelector(state => state.user)
 
     // const handleChangeQuantities = (pid, quantity, color) => {
     //     //console.log({pid,quantity, color})
     //     //console.log(currentCart)
     //     dispatch(updateCart({ pid, quantity, color }))
     // }
+
+    const handleSubmit = () => {
+        if (!current?.address) {
+            return Swal.fire({
+                icon: 'info',
+                title: 'Almost there!',
+                text: 'Please update your address before proceeding to checkout.',
+                showCancelButton: true,
+                showConfirmButton: true,
+                confirmButtonText: 'Update Address',
+                cancelButtonText: 'Cancel',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    navigate({
+                        pathname: `/${path.MEMBER}/${path.PERSONAL}`,
+                        search: createSearchParams({ redirect: location.pathname }).toString(),
+                    })
+                }
+            })
+
+        } else {
+            window.open(`/${path.CHECKOUT}`, '_blank')
+        }
+    }
 
     return (
         <div className='w-full'>
@@ -50,7 +75,8 @@ const DetailCart = ({ dispatch, location }) => {
                     <span className='text-main font-bold'>{formatMoney(currentCart?.reduce((sum, el) => +el.price * el.quantity + sum, 0))}</span>
                 </span>
                 <span className='text-gray-500 text-xs italic'>Shipping, taxes, and discounts calculated at checkout</span>
-                <Link target='_blank' className='bg-main text-white px-4 py-2 rounded-md' to={`/${path.CHECKOUT}`}>Checkout</Link>
+                <Button handleOnClick={handleSubmit}>Checkout</Button>
+                {/* <Link target='_blank' className='bg-main text-white px-4 py-2 rounded-md' to={`/${path.CHECKOUT}`}>Checkout</Link> */}
             </div>
         </div>
     )
