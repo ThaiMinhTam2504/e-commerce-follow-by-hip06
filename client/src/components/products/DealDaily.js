@@ -109,7 +109,7 @@ const DealDaily = ({ dispatch }) => {
                 </div>
                 <button
                     type='button'
-                    className='flex gap-2 items-center justify-center w-full bg-main text-white hover:bg-gray-800 text-white font-medium py-2'
+                    className='flex gap-2 items-center justify-center w-full bg-main hover:bg-gray-800 text-white font-medium py-2'
                 >
                     <AiOutlineMenu />
                     <span>Options</span>
